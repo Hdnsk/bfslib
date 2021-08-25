@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from scipy.signal import find_peaks
+from numpy import array as nparr
 
 
 class AbstractGenerator(ABC):
@@ -33,15 +35,17 @@ class AbstractGenerator(ABC):
     def gen_y(self) -> None:
         pass
 
-    @abstractmethod
     def set_x_offset(self) -> None:
         pass
 
     def get_peaks(self) -> list:
-        pass
+        peaks, _ = find_peaks(self.y_list)
+        return peaks
 
     def get_valleys(self) -> list:
-        pass
+        inv_y = self.y_list*(-1)
+        valleys, _ = find_peaks(inv_y)
+        return valleys
 
 
 class AbstractBlock(ABC):
